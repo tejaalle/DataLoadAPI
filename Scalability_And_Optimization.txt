@@ -17,3 +17,4 @@ Scalability and Optimization:
 
     Monitoring:
       Currently I added monitoring only for the time taken to process each file. once I know more about the data we can set monitoring customer wise or item wise, depending on our need. for example which item has been purchased more number of times.
+      Currently I added time taken in seconds but we can move to nano seconds if need more precise as seconds can be zero for smaller datasets

@@ -15,14 +15,18 @@ def main():
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger_server/swagger/swagger.yaml')
     start_http_server(port=8000, addr="0.0.0.0")
-    logger.info("starting Pepper Data Processing server")
-    app.run(host="0.0.0.0", port=8080)
-    #initializing globals
+
+    # initializing globals
     # records_per_output_file = Counter("Records_Per_Output_File", "Number of Records per output file", ["Output_file_name"])
-    time_taken_to_process = Histogram("Time_taken_to_process", "Time taken to process all the datasets for each request ", ["output_file_name"])
+    time_taken_to_process = Histogram("Time_taken_to_process",
+                                      "Time taken to process all the datasets for each request ", ["output_file_name"])
 
     globals.init()
     globals.set("time_taken_to_process", time_taken_to_process)
+
+    logger.info("starting Pepper Data Processing server")
+    app.run(host="0.0.0.0", port=8080)
+
 
 
 
