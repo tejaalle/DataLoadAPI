@@ -1,0 +1,62 @@
+<transactions>
+    <transaction>
+        <transaction_id>1001</transaction_id>
+        <customer_id>1</customer_id>
+        <item_id>1</item_id>
+        <transaction_date>2023-01-15</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1002</transaction_id>
+        <customer_id>2</customer_id>
+        <item_id>3</item_id>
+        <transaction_date>15-02-2023</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1003</transaction_id>
+        <customer_id>3</customer_id>
+        <item_id>5</item_id>
+        <transaction_date>2023/03/01</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1004</transaction_id>
+        <customer_id>4</customer_id>
+        <item_id>8</item_id>
+        <transaction_date>2023.03.05</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1005</transaction_id>
+        <customer_id>5</customer_id>
+        <item_id>7</item_id>
+        <transaction_date>March 10, 2023</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1006</transaction_id>
+        <customer_id>6</customer_id>
+        <item_id>11</item_id>
+        <transaction_date>2023-03-15</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1007</transaction_id>
+        <customer_id>7</customer_id>
+        <item_id>12</item_id>
+        <transaction_date>2023-03-20</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1008</transaction_id>
+        <customer_id>8</customer_id>
+        <item_id>14</item_id>
+        <transaction_date>20th March 2023</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1009</transaction_id>
+        <customer_id>9</customer_id>
+        <item_id>2</item_id>
+        <transaction_date>03-25-2023</transaction_date>
+    </transaction>
+    <transaction>
+        <transaction_id>1010</transaction_id>
+        <customer_id>10</customer_id>
+        <item_id>9</item_id>
+        <transaction_date>March 30th, 2023</transaction_date>
+    </transaction>
+</transactions>

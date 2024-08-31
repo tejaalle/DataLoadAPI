@@ -1,0 +1,72 @@
+[
+    {
+        "customer_id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com",
+        "membership_date": "2022-04-12"
+    },
+    {
+        "customer_id": 2,
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "email": "jane.smith@example.com",
+        "membership_date": "2021/03/15"
+    },
+    {
+        "customer_id": 3,
+        "first_name": "Alice",
+        "last_name": "Johnson",
+        "email": "alice.johnson@example.com",
+        "membership_date": "March 20, 2020"
+    },
+    {
+        "customer_id": 4,
+        "first_name": "Bob",
+        "last_name": "Brown",
+        "email": "bob.brown@example.com",
+        "membership_date": "2020.07.25"
+    },
+    {
+        "customer_id": 5,
+        "first_name": "Charlie",
+        "last_name": "Davis",
+        "email": "charlie.davis@example.com",
+        "membership_date": "07-25-2020"
+    },
+    {
+        "customer_id": 6,
+        "first_name": "David",
+        "last_name": "Evans",
+        "email": "david.evans@example.com",
+        "membership_date": "20210515"
+    },
+    {
+        "customer_id": 7,
+        "first_name": "Emma",
+        "last_name": "Foster",
+        "email": "emma.foster@example.com",
+        "membership_date": "15th May 2021"
+    },
+    {
+        "customer_id": 8,
+        "first_name": "Grace",
+        "last_name": "Harris",
+        "email": "grace.harris@example.com",
+        "membership_date": "April 5th, 2021"
+    },
+    {
+        "customer_id": 9,
+        "first_name": "Henry",
+        "last_name": "Irvine",
+        "email": "henry.irvine@example.com",
+        "membership_date": "2020-11-30"
+    },
+    {
+        "customer_id": 10,
+        "first_name": "Isabel",
+        "last_name": "Jackson",
+        "email": "isabel.jackson@example.com",
+        "membership_date": "December 1, 2019"
+    }
+]

@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: Peppers Data Processing API
+  description: "The API for the extracting, Transform, Load of customer data, items\
+    \ data, Transaction data of peppers"
+  version: 1.0.0
+#servers:
+#- url: https://virtserver.swaggerhub.com/TEJAALLE47/Pepper-DataProcessing/1.0.0
+#  description: SwaggerHub API Auto Mocking
+paths:
+  /process_data:
+    post:
+      tags:
+      - ProcessData
+      operationId: process_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessDataInput'
+      responses:
+        "200":
+          description: successfully processed data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessDataOutput'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessDataError'
+      x-openapi-router-controller: swagger_server.controllers.process_data_controller
+components:
+  schemas:
+    ProcessDataInput:
+      type: object
+      properties:
+        customers_file:
+          type: string
+          example: customer_file.csv
+        transactions_file:
+          type: string
+          example: transactions_file.json
+        items_file:
+          type: string
+          example: items_file.xml
+    ProcessDataOutput:
+      type: object
+      properties:
+        output_file:
+          type: string
+          example: output_file.jsonl
+      example:
+        output_file: output_file.jsonl
+    ProcessDataError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: PPD400
+        message:
+          type: string
+          example: Failed with <>
+

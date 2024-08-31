@@ -1,0 +1,8 @@
+customers_file : "customers.json"
+items_file: "items.csv"
+transactions_file: "transactions.xml"
+extensions_supported:
+  - csv
+  - json
+  - xml
+manifest_file: "manifest.txt"

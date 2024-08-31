@@ -1,0 +1,19 @@
+Scalability and Optimization:
+    Reading the files (location):
+       Currently we are reading files from local which doesn't have performance issue. If the files are available in some other servers
+       like s3. we need to use APIs provided by them to load the file which is not currently supported in my code. And the the time to read large files will also be increased which
+       affects the performance of the API. then we should consider moving it to a different architecture where API just acts a trigger for the job which performs ETL
+       other methods like mounting the servers where the files are present to the compute where this Flask server is running.
+
+    Reading large files:
+       Reading files with large data may not be supported by modules I use for example reading the csv using pandas has huge impact on the performance. alternative methods like reading the files into chunks or other module
+       which doesn't have impact on the performance can be used.
+
+    Module Support:
+       Currently I am using modules for parsing date on the fields. those modules might be successful with our current samples files but it doesn't guarantee successful outcomes in all the cases
+
+    Transformation:
+       Current transformations on the dataframes are simple as the data become more complex and large we need to use multiprocessing to speed up the process or the modules like Pyspark, Dask, swifter.
+
+    Monitoring:
+      Currently I added monitoring only for the time taken to process each file. once I know more about the data we can set monitoring customer wise or item wise, depending on our need. for example which item has been purchased more number of times.

@@ -1,0 +1,27 @@
+## This APP exposes an API to Extract data from customers, transactions, Items datasets and then transforms and LOAD them into output JSONL files
+
+##To start the server
+
+Get into the folder and Run
+
+create a virtual environment
+
+'''
+python -m venv <VENV_NAME>
+
+'''
+Get into the venv
+
+Install requirements
+
+'''
+pip install -r requirements.txt
+
+'''
+
+Run the application
+
+'''
+python main.py
+
+'''
