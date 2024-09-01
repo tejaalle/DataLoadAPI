@@ -18,3 +18,7 @@ Scalability and Optimization:
     Monitoring:
       Currently I added monitoring only for the time taken to process each file. once I know more about the data we can set monitoring customer wise or item wise, depending on our need. for example which item has been purchased more number of times.
       Currently I added time taken in seconds but we can move to nano seconds if need more precise as seconds can be zero for smaller datasets
+
+    Multiple requests:
+      if you send multiple request at the same time to the same server It causes file errors as we are working on the same file. If each requests have different files and files are loaded on to the server. It should not cause any error
+

@@ -13,6 +13,7 @@ class Constants(object):
     MANIFEST_FILE = "manifest_file"
     DATE_FORMAT = "%Y-%m-%d"
     EXTENSIONS_SUPPORTED= "extensions_supported"
+    TIME_TAKEN_TO_PROCESS = "time_taken_to_process"
 
     def __setattr__(self, key, value):
         raise TypeError("Assignment is not supported by constant variable")

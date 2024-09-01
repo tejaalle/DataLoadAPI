@@ -25,3 +25,13 @@ Run the application
 python main.py
 
 '''
+## Prometheus client is running on 8000. Add this to your prometheus server to pull the metrics
+
+## API details can be found at swagger_server/swagger/swagger.yaml
+
+Input: Dict of filenames in csv, json, xml formats. If values are None. default values are taken from config
+Output: Location of manifest file
+
+Config Location: config/config.yaml
+
+

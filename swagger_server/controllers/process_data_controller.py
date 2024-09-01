@@ -22,6 +22,8 @@ def process_data(body=None):  # noqa: E501
         file_reader = FileReader()
         fileProcessingService = FileProcessingService(file_reader)
         files = {"customers_file": body.customers_file, "items_file": body.items_file, "transactions_file": body.transactions_file}
+
+        #checks if the input has the file_name and is in supported formart.  if fileName not provided, loads the default filename from config
         for file in files:
             if files[file]:
                 supported, exception = fileProcessingService.is_file_format_supported(files[file])
@@ -42,7 +44,7 @@ def process_data(body=None):  # noqa: E501
             logger.info("Successfully process files. Returning output")
             return ProcessDataOutput(response), 200
         except Exception as ex:
-            return ProcessDataError("PDP500", f"{ex=}")
+            return ProcessDataError("PDP500", f"Exception occured while processing data {ex=}")
     else:
         return ProcessDataError("PDP400", "Bad Request")
 

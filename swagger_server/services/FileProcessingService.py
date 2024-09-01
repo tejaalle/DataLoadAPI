@@ -7,6 +7,7 @@ from flask_log_request_id import current_request_id
 from datetime import datetime
 from Globals import globals
 
+
 class FileProcessingService():
     def __init__(self, file_reader):
         self.file_reader = file_reader
@@ -18,12 +19,13 @@ class FileProcessingService():
         :description: extracts data from customer, items and transactions data and perform some cleaning and creates and comprehensive dataset
         :rtype: tuple(str, Exception)
         """
+
     def process_data(self, files):
 
         try:
             output = None
             start_time = datetime.now()
-            #Extracting data from files
+            # Extracting data from files
             customers, exception = self.__read_file_to_df(files[Constants.CUSTOMER_FILE])
             if exception:
                 logger.critical(f"Failed to read Customers file with {exception=}")
@@ -39,7 +41,7 @@ class FileProcessingService():
                 return output, exception
             logger.info("Success reading customers, Items and Transactions")
 
-            #Performing some transformations
+            # Performing some transformations
             customers[Constants.MEMBERSHIP_DATE] = customers[Constants.MEMBERSHIP_DATE].apply(self.__format_date)
             transactions[Constants.TRANSACTION_DATE] = transactions[Constants.TRANSACTION_DATE].apply(
                 self.__format_date)
@@ -55,40 +57,46 @@ class FileProcessingService():
                             }
             transactions = transactions.astype(convert_dict)
 
-            #Merging the datasets
+            # Merging the datasets
 
             comprehensive_view = pd.merge(pd.merge(transactions, customers, on=Constants.CUSTOMER_ID), items,
                                           on=Constants.ITEM_ID)
             current_id = current_request_id()
             id = current_id[-10:-1]
-            output_file_name = "output_file_" +id + ".jsonl"
+            output_file_name = "output/output_file_" + id
+            manifest_file_name = "manifest/manifest_file_"+id+".txt"
             row_count = comprehensive_view.shape[0]
             logger.info(f"Success creating the comprehensive_view with {row_count=}")
 
-            #Outputing the datasets
-            output_path = "output/" + output_file_name
-
-            with open(output_path, "w") as f:
-                f.write(comprehensive_view.to_json(orient='records', lines=True, force_ascii=False))
-                f.close()
-            with open(config[Constants.MANIFEST_FILE], "a") as m:
-                m.write(f"{output_file_name}:  {row_count}\n")
+            # Outputing the datasets
+            with open(manifest_file_name, "w") as m:
+                for customer_id in comprehensive_view[Constants.CUSTOMER_ID].unique():
+                    customer_info = "custId_"+ str(customer_id)
+                    curr_output_file_name = output_file_name+"_"+ customer_info
+                    with open(curr_output_file_name, "w") as f:
+                        customer_df = comprehensive_view[comprehensive_view[Constants.CUSTOMER_ID]==customer_id]
+                        f.write(customer_df.to_json(orient='records', lines=True, force_ascii=False))
+                        f.close()
+                        m.write(f"{customer_info}:  {customer_df.shape[0]}\n")
                 m.close()
-            logger.info(f"Success creating {output_file_name} and adding it to manifest file")
-            end_time= datetime.now()
-            time_diff = end_time-start_time
-            self.__observe_time_taken(output_file_name, time_diff.seconds)
-            logger.info(f"Added time taken to process {output_file_name} to prometheus {time_diff.seconds} ")
-            return output_file_name, None
+            logger.info(f"Success creating Jsonl files and adding it to manifest file")
+            end_time = datetime.now()
+            time_diff = end_time - start_time
+
+            # Monitoring
+            self.__observe_time_taken(manifest_file_name, time_diff.seconds)
+            logger.info(f"Added time taken to process {manifest_file_name} to prometheus {time_diff.seconds} ")
+            return manifest_file_name, None
         except Exception as ex:
             logger.critical(f"Exception occurred while processing the files. Failed with exception {ex=} ")
             return None, ex
 
     def __format_date(self, date_str):
         parsed_date = parse(date_str)
-        return parsed_date.strftime("%Y-%m-%d")
+        return parsed_date.strftime(Constants.DATE_FORMAT)
 
     def __xml_to_dictList(self, xmlRoot):
+        #Parses the xml root element into list of dictonaries
         rootList = []
         for items in xmlRoot:
             itemDict = {}
@@ -107,6 +115,7 @@ class FileProcessingService():
         return pd.DataFrame(dict)
 
     def is_file_format_supported(self, file_name):
+        # return boolean value checking if the file extension is currently supported by us
         try:
             extension_list = file_name.rsplit(".", 1)
             if extension_list[-1] in config[Constants.EXTENSIONS_SUPPORTED]:
@@ -117,11 +126,20 @@ class FileProcessingService():
             return None, ex
 
     def get_file_extension(self, file_name):
+        # Returns the file extension
         try:
             extension_list = file_name.rsplit(".", 1)
             return extension_list[-1], None
         except Exception as ex:
             return None, ex
+
+    """__read_file_to_df
+
+            :param file_name: 
+            :type file_name: str 
+            :description: checks if the file is in supported format and then tries to load to a DataFrame
+            :rtype: tuple(DatFrame, Exception)
+            """
 
     def __read_file_to_df(self, file_name):
         try:
@@ -155,5 +173,5 @@ class FileProcessingService():
             return None, ex
 
     def __observe_time_taken(self, output_file_name, time_diff):
-        time_taken_to_process = globals.get("time_taken_to_process")
+        time_taken_to_process = globals.get(Constants.TIME_TAKEN_TO_PROCESS)
         time_taken_to_process.labels(output_file_name=output_file_name).observe(time_diff)

@@ -5,4 +5,3 @@ extensions_supported:
   - csv
   - json
   - xml
-manifest_file: "manifest.txt"
