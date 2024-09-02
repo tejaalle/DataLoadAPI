@@ -32,7 +32,8 @@ python main.py
 Input: Dict of filenames in csv, json, xml formats. If values are None. default values are taken from config
 Output: Location of manifest file
 
-output files are stored in output folder and manifest file is stored in manifest folder.
+output files are stored in output folder, for each request it will create a folder in output directory and stores the jsonl files for each customer.
+and manifest file is stored in manifest folder for each request. manifest contains the last 10 digits in request_id
 
 Config Location: config/config.yaml
 

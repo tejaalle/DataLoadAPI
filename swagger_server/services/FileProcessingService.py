@@ -1,3 +1,5 @@
+import os
+
 from AppConfig import logger
 from dateutil.parser import parse
 import pandas as pd
@@ -61,18 +63,23 @@ class FileProcessingService():
 
             comprehensive_view = pd.merge(pd.merge(transactions, customers, on=Constants.CUSTOMER_ID), items,
                                           on=Constants.ITEM_ID)
-            current_id = current_request_id()
-            id = current_id[-10:-1]
-            output_file_name = "output/output_file_" + id
-            manifest_file_name = "manifest/manifest_file_"+id+".txt"
             row_count = comprehensive_view.shape[0]
             logger.info(f"Success creating the comprehensive_view with {row_count=}")
+            current_id = current_request_id()
+            id = current_id[-10:]
+            output_file_name = "output/"+current_id
+            if not os.path.exists(output_file_name):
+                os.makedirs(output_file_name)
+            output_file_name += "/output_file_"
+            manifest_file_name = "manifest/manifest_file_"+id+".txt"
+            logger.debug("Success creating/choosing folders for Output file and Manifest file")
+
 
             # Outputing the datasets
             with open(manifest_file_name, "w") as m:
                 for customer_id in comprehensive_view[Constants.CUSTOMER_ID].unique():
                     customer_info = "custId_"+ str(customer_id)
-                    curr_output_file_name = output_file_name+"_"+ customer_info
+                    curr_output_file_name = output_file_name+ customer_info
                     with open(curr_output_file_name, "w") as f:
                         customer_df = comprehensive_view[comprehensive_view[Constants.CUSTOMER_ID]==customer_id]
                         f.write(customer_df.to_json(orient='records', lines=True, force_ascii=False))
