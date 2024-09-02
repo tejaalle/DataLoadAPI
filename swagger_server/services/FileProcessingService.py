@@ -79,7 +79,7 @@ class FileProcessingService():
             with open(manifest_file_name, "w") as m:
                 for customer_id in comprehensive_view[Constants.CUSTOMER_ID].unique():
                     customer_info = "custId_"+ str(customer_id)
-                    curr_output_file_name = output_file_name+ customer_info
+                    curr_output_file_name = output_file_name+ customer_info+".jsonl"
                     with open(curr_output_file_name, "w") as f:
                         customer_df = comprehensive_view[comprehensive_view[Constants.CUSTOMER_ID]==customer_id]
                         f.write(customer_df.to_json(orient='records', lines=True, force_ascii=False))
