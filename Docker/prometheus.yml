@@ -1,0 +1,28 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']  # This should be the port where Prometheus is running
+    metrics_path: '/metrics'
+  - job_name: 'HTTP Server for REST Instance'
+    static_configs:
+      - targets: ['host.docker.internal:9091']  # This should be the port where node_exporter is running
+    metrics_path: '/metrics'
+  - job_name: 'HTTP Server for Async Alpha Instance'
+    static_configs:
+      - targets: ['host.docker.internal:9099']  # This should be the port where node_exporter is running
+    metrics_path: '/metrics'
+  - job_name: 'HTTP Server for Async Beta Instance'
+    static_configs:
+      - targets: ['host.docker.internal:9093']  # This should be the port where node_exporter is running
+    metrics_path: '/metrics'
+  - job_name: 'HTTP Server for predictionlog'
+    static_configs:
+      - targets: ['host.docker.internal:9094']  # This should be the port where node_exporter is running
+    metrics_path: '/metrics'
+  - job_name: 'flask_app'
+    static_configs:
+      - targets: ['host.docker.internal:8089']  # This should be the port where your Flask app is running
+    metrics_path: '/metrics'

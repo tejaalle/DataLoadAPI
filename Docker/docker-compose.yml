@@ -1,0 +1,74 @@
+version: '3'
+networks:
+  ml:
+    name: ml-net
+services:
+  kafka:
+    image: bitnami/kafka:2
+    networks:
+      - ml
+    ports:
+      - "1298:1298"
+      - "21298:21298"
+    container_name: kafka
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:21298,PLAINTEXT_HOST://:1298
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:21298,PLAINTEXT_HOST://localhost:1298
+    depends_on:
+      - zookeeper
+
+
+  zookeeper:
+    image: bitnami/zookeeper:3
+    networks:
+      - ml
+    ports:
+      - "2181:2181"
+    container_name: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  topic:
+    image: confluentinc/cp-kafka:4.0.1
+    networks:
+      - ml
+    container_name: ml-topics
+    depends_on:
+      - kafka
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+                   sleep 10 && \
+                   echo Kafka is ready, creating topics && \
+                   kafka-topics --create --topic ml_dow_transaction_alpha --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
+                   kafka-topics --create --topic ml_dow_transaction_beta --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
+                   kafka-topics --create --topic transaction_prediction_dow --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
+                   kafka-topics --create --topic ml_cybersource_dow_alpha --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
+                   kafka-topics --create --topic ml_cybersource_dow_dlq --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
+                   kafka-console-consumer --topic transaction_prediction_dow --group tx_prediction_dow_consumer_group  --zookeeper zookeeper:2181 && \
+                   kafka-console-consumer --topic ml_dow_transaction_alpha --group ml_dow_transaction_consumer_group_alpha  --zookeeper zookeeper:2181 && \
+                   kafka-console-consumer --topic ml_dow_transaction_beta --group ml_dow_transaction_consumer_group_beta  --zookeeper zookeeper:2181 && \
+                   kafka-console-consumer --topic ml_cybersource_dow_alpha --group ml_cybersource_dow_consumer_group_alpha  --zookeeper zookeeper:2181 && \
+                   echo Waiting a few seconds for topic creation to finish... && \
+                   sleep 2'"
+
+  prometheus:
+    image: prom/prometheus:latest
+    networks:
+      - ml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:latest
+    networks:
+      - ml
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
